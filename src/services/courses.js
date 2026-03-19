@@ -1,0 +1,49 @@
+import api from './api';
+
+// Get all published courses (public)
+export const getPublishedCourses = async () => {
+  const response = await api.get('/courses/published');
+  return response.data;
+};
+
+// Get course by ID
+export const getCourseById = async (id) => {
+  const response = await api.get(`/courses/${id}`);
+  return response.data;
+};
+
+// Enroll in a course (student only)
+export const enrollInCourse = async (courseId) => {
+  const response = await api.post(`/enrollments/course/${courseId}`);
+  return response.data;
+};
+
+// Get student's enrolled courses
+export const getMyCourses = async () => {
+  const response = await api.get('/enrollments/my-courses');
+  return response.data;
+};
+
+// Update course progress
+export const updateProgress = async (enrollmentId, progress) => {
+  const response = await api.put(`/enrollments/${enrollmentId}/progress?progress=${progress}`);
+  return response.data;
+};
+
+// Get course materials (for enrolled students)
+export const getCourseMaterials = async (courseId) => {
+  const response = await api.get(`/courses/${courseId}/materials`);
+  return response.data;
+};
+
+// Rate a course
+export const rateCourse = async (courseId, rating, review) => {
+  const response = await api.post(`/courses/${courseId}/ratings`, { rating, review });
+  return response.data;
+};
+
+// Get course rating summary
+export const getCourseRatingSummary = async (courseId) => {
+  const response = await api.get(`/courses/${courseId}/ratings/summary`);
+  return response.data;
+};

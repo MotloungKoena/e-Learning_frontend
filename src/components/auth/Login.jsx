@@ -1,22 +1,60 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login data:', formData);
-    // We'll connect to backend laterds
-  };
+    setError('');
+    setLoading(true);
+    
+    try {
+      await login(formData.email, formData.password);
+      navigate('/courses'); // Redirect to courses after login
+    } catch (err) {
+      setError(err.response?.data || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };*/
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  
+  try {
+    await login(formData.email, formData.password);
+    navigate('/courses');
+  } catch (err) {
+    console.error('Login error in component:', err);
+    // Try to get the error message from the response
+    const errorMessage = err.response?.data || 'Login failed. Please try again.';
+    setError(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Login to Your Account</h2>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -55,9 +93,10 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50"
         >
-          Sign In
+          {loading ? 'Logging in...' : 'Sign In'}
         </button>
       </form>
 

@@ -88,15 +88,14 @@ function App() {
 
 export default App;*/
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import Navbar from './components/common/Navbar';
+import Navbar from './components/common/NavBar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CourseList from './components/student/CourseList';
 import CourseDetails from './components/student/CourseDetails';
 
-// Temporary placeholder components until we build them
 const Home = () => (
   <div className="text-center py-12">
     <h1 className="text-4xl font-bold text-gray-800 mb-4">Welcome to E-Learning Platform</h1>

@@ -1,5 +1,6 @@
-import axios from 'axios';
+/*import axios from 'axios';
 
+// Use your backend URL
 const API_URL = 'http://localhost:8080/api';
 
 const api = axios.create({
@@ -9,7 +10,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add token [citation:7]
+// Add token to requests if it exists
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -21,16 +22,30 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+export default api;*/
+
+import axios from 'axios';
+
+// Use relative URL - this will be proxied to your backend
+const API_URL = '/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add token to requests if it exists
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return Promise.reject(error);
-  }
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 export default api;
