@@ -30,10 +30,9 @@ const Register = () => {
       const response = await register(formData);
       console.log('Registration response:', response);
       
-      // Show success message
       setSuccess('Registration successful! Please check your email to verify your account.');
       
-      // Clear form
+      //Clear form
       setFormData({
         email: '',
         password: '',
@@ -42,7 +41,6 @@ const Register = () => {
         role: 'STUDENT'
       });
       
-      // Optionally redirect to login after 3 seconds
       setTimeout(() => {
         navigate('/login');
       }, 3000);
