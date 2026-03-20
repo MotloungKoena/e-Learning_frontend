@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getCourseById, enrollInCourse, getCourseMaterials, getCourseRatingSummary, rateCourse } from '../../services/Courses';
+import { getCourseById, enrollInCourse, getCourseMaterials, getCourseRatingSummary, rateCourse } from '../../services/courses';
 import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft } from 'lucide-react';
 
 const CourseDetails = () => {

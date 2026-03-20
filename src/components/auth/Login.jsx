@@ -28,6 +28,7 @@ const Login = () => {
       setLoading(false);
     }
   };*/
+
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
@@ -38,7 +39,7 @@ const Login = () => {
     navigate('/courses');
   } catch (err) {
     console.error('Login error in component:', err);
-    // Try to get the error message from the response
+    //Trying to get the error message from the response
     const errorMessage = err.response?.data || 'Login failed. Please try again.';
     setError(errorMessage);
   } finally {
