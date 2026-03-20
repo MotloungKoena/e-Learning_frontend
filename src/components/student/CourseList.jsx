@@ -52,7 +52,7 @@ const CourseList = () => {
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
-          {user ? `Welcome back, ${user.firstName}! 👋` : 'Discover Your Next Course'}
+          {user ? `Welcome back, ${user.firstName}! ` : 'Discover Your Next Course'}
         </h1>
         <p className="text-gray-600 mt-2">
           Explore our curated collection of courses and start learning today.
