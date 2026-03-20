@@ -2,19 +2,19 @@
 
 React frontend for the e-Learning platform, built with Vite for fast development and optimal performance.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **React** - UI library
 - **Vite** - Build tool and development server
 - **ESLint** - Code linting
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have installed:
 - Node.js (v18 or higher)
 - npm or yarn
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
 ```bash
