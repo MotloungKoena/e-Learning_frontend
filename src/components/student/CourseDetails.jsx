@@ -28,7 +28,7 @@ const CourseDetails = () => {
     try {
       const [courseData, materialsData, ratingData] = await Promise.all([
         getCourseById(id),
-        getCourseMaterials(id).catch(() => []), // Materials might be protected
+        getCourseMaterials(id).catch(() => []), 
         getCourseRatingSummary(id).catch(() => null)
       ]);
       
