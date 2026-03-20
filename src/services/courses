@@ -1,12 +1,8 @@
 import api from './api';
+
 // Get token from localStorage
 const getToken = () => localStorage.getItem('token');
 
-// Get all published courses (public)
-/*export const getPublishedCourses = async () => {
-  const response = await api.get('/courses/published');
-  return response.data;
-};*/
 // Get all published courses (public)
 export const getPublishedCourses = async () => {
   try {
@@ -21,11 +17,6 @@ export const getPublishedCourses = async () => {
   }
 };
 
-// Get course by ID
-/*export const getCourseById = async (id) => {
-  const response = await api.get(`/courses/${id}`);
-  return response.data;
-};*/
 // Get course by ID
 export const getCourseById = async (id) => {
   try {
