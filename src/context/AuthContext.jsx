@@ -36,20 +36,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /*const login = async (email, password) => {
-    const response = await apiLogin(email, password);
-    const { token, ...userData } = response;
-    
-    localStorage.setItem('token', token);
-    setToken(token);
-    setUser(userData);
-    
-    return userData;
-  };*/
   const login = async (email, password) => {
   try {
     const response = await apiLogin(email, password);
-    console.log('Login response:', response); // Add this for debugging
+    console.log('Login response:', response); // added for debugging
     
     const { token, ...userData } = response;
     
