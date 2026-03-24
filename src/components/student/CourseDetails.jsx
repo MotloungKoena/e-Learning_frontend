@@ -269,6 +269,22 @@ import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft, CheckC
 
 const CourseDetails = () => {
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, isStudent } = useAuth();
+
+  const [course, setCourse] = useState(null);
+  const [materials, setMaterials] = useState([]);
+  const [ratingSummary, setRatingSummary] = useState(null);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [enrolling, setEnrolling] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [userRating, setUserRating] = useState(0);
+  const [userReview, setUserReview] = useState('');
+  const [showRatingForm, setShowRatingForm] = useState(false);
+
 console.log('Auth state:', { 
   isAuthenticated, 
   isStudent, 
@@ -282,22 +298,8 @@ useEffect(() => {
   console.log('Context isAuthenticated:', isAuthenticated);
   console.log('Context user:', user);
 }, [isAuthenticated, user]);
-
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { user, isAuthenticated, isStudent } = useAuth();
   
-  const [course, setCourse] = useState(null);
-  const [materials, setMaterials] = useState([]);
-  const [ratingSummary, setRatingSummary] = useState(null);
-  const [isEnrolled, setIsEnrolled] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [enrolling, setEnrolling] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [userRating, setUserRating] = useState(0);
-  const [userReview, setUserReview] = useState('');
-  const [showRatingForm, setShowRatingForm] = useState(false);
+  
 
   useEffect(() => {
     console.log('Course ID from URL:', id); // Debugging log
