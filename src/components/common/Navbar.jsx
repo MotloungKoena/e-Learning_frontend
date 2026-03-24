@@ -3,7 +3,7 @@ import { BookOpen, User, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();  // Make sure to get user from useAuth()
+  const { user, isAuthenticated, logout } = useAuth();  
   const navigate = useNavigate();
 
   const handleLogout = () => {
