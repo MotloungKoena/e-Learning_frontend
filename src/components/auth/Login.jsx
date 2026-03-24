@@ -14,21 +14,6 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    
-    try {
-      await login(formData.email, formData.password);
-      navigate('/courses'); // Redirect to courses after login
-    } catch (err) {
-      setError(err.response?.data || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };*/
-
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
@@ -39,7 +24,6 @@ const Login = () => {
     navigate('/courses');
   } catch (err) {
     console.error('Login error in component:', err);
-    //Trying to get the error message from the response
     const errorMessage = err.response?.data || 'Login failed. Please try again.';
     setError(errorMessage);
   } finally {
