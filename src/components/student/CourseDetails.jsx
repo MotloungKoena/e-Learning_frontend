@@ -257,11 +257,11 @@ export default CourseDetails;*/
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { 
-  getCourseById, 
-  enrollInCourse, 
-  getCourseMaterials, 
-  getCourseRatingSummary, 
+import {
+  getCourseById,
+  enrollInCourse,
+  getCourseMaterials,
+  getCourseRatingSummary,
   rateCourse,
   getMyCourses
 } from '../../services/courses';
@@ -285,21 +285,21 @@ const CourseDetails = () => {
   const [userReview, setUserReview] = useState('');
   const [showRatingForm, setShowRatingForm] = useState(false);
 
-console.log('Auth state:', { 
-  isAuthenticated, 
-  isStudent, 
-  user: user?.email,
-  hasUser: !!user 
-});
-//debugging
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  console.log('Manual token check:', token);
-  console.log('Context isAuthenticated:', isAuthenticated);
-  console.log('Context user:', user);
-}, [isAuthenticated, user]);
-  
-  
+  console.log('Auth state:', {
+    isAuthenticated,
+    isStudent,
+    user: user?.email,
+    hasUser: !!user
+  });
+  //debugging
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    console.log('Manual token check:', token);
+    console.log('Context isAuthenticated:', isAuthenticated);
+    console.log('Context user:', user);
+  }, [isAuthenticated, user]);
+
+
 
   useEffect(() => {
     console.log('Course ID from URL:', id); // Debugging log
@@ -315,10 +315,10 @@ useEffect(() => {
         getCourseRatingSummary(id).catch(() => null)
       ]);
       console.log('Course data received:', courseData);
-      
+
       setCourse(courseData);
       setRatingSummary(ratingData);
-      
+
       // Try to fetch materials if enrolled
       if (isEnrolled) {
         const materialsData = await getCourseMaterials(id).catch(() => []);
@@ -335,7 +335,7 @@ useEffect(() => {
 
   const checkEnrollment = async () => {
     if (!isAuthenticated) return;
-    
+
     try {
       const myCourses = await getMyCourses();
       console.log('My enrolled courses:', myCourses);
@@ -360,8 +360,14 @@ useEffect(() => {
     try {
       await enrollInCourse(id);
       setIsEnrolled(true);
+      //Refresh course data to get updated enrollment count
+      const updatedCourse = await getCourseById(id);
+      console.log('Updated course after enrollment:', updatedCourse); // Add this line
+      console.log('Enrollments count:', updatedCourse.enrollments?.length); // Add this line
+      setCourse(updatedCourse);
+
       setSuccess('Successfully enrolled! You can now access course materials.');
-      
+
       // Fetch materials after enrollment
       const materialsData = await getCourseMaterials(id);
       setMaterials(materialsData);
@@ -458,7 +464,7 @@ useEffect(() => {
             </div>
             <div className="flex items-center">
               <Users className="h-5 w-5 text-gray-500" />
-              <span className="ml-2 text-gray-700">{course.enrollments?.length || 0} students</span>
+              <span className="ml-2 text-gray-700">{course.enrollmentCount || 0} students</span>
             </div>
             <div className="flex items-center">
               <Clock className="h-5 w-5 text-gray-500" />
@@ -467,28 +473,28 @@ useEffect(() => {
           </div>
 
           {/* Enroll Button */}
-{isEnrolled ? (
-  <div className="text-green-600 font-semibold">
-    ✅ You are enrolled in this course
-  </div>
-) : (
-  isStudent ? (
-    <button
-      onClick={handleEnroll}
-      disabled={enrolling}
-      className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-    >
-      {enrolling ? 'Enrolling...' : 'Enroll Now'}
-    </button>
-  ) : (
-    <button
-      onClick={() => navigate('/login')}
-      className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-    >
-      Login to Enroll
-    </button>
-  )
-)}
+          {isEnrolled ? (
+            <div className="text-green-600 font-semibold">
+              ✅ You are enrolled in this course
+            </div>
+          ) : (
+            isStudent ? (
+              <button
+                onClick={handleEnroll}
+                disabled={enrolling}
+                className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {enrolling ? 'Enrolling...' : 'Enroll Now'}
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Login to Enroll
+              </button>
+            )
+          )}
 
         </div>
       </div>
@@ -524,7 +530,7 @@ useEffect(() => {
       {isAuthenticated && isStudent && isEnrolled && (
         <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Rate This Course</h2>
-          
+
           {!showRatingForm ? (
             <button
               onClick={() => setShowRatingForm(true)}
