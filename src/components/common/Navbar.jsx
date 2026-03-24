@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, User, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
-  const isAuthenticated = false;
+  const { user, isAuthenticated, logout } = useAuth();  // Make sure to get user from useAuth()
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  console.log('Navbar - isAuthenticated:', isAuthenticated);
+  console.log('Navbar - user:', user);
 
   return (
     <nav className="bg-white shadow-lg">
@@ -20,13 +30,28 @@ const Navbar = () => {
             
             {isAuthenticated ? (
               <>
-                <Link to="/dashboard" className="text-gray-600 hover:text-blue-600">
-                  Dashboard
-                </Link>
-                <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-600">
-                  <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
-                </button>
+                {user?.role === 'INSTRUCTOR' && (
+                  <Link to="/instructor/courses" className="text-gray-600 hover:text-blue-600">
+                    My Courses
+                  </Link>
+                )}
+                {user?.role === 'STUDENT' && (
+                  <Link to="/my-courses" className="text-gray-600 hover:text-blue-600">
+                    My Learning
+                  </Link>
+                )}
+                <div className="flex items-center space-x-3">
+                  <span className="text-gray-700">
+                    Hi, {user?.firstName || 'User'}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-1 text-gray-600 hover:text-blue-600"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
               </>
             ) : (
               <>
