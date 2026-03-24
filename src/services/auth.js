@@ -10,10 +10,6 @@ export const register = async (userData) => {
   return response.data;
 };
 
-/*export const getCurrentUser = async () => {
-  const response = await api.get('/users/me');
-  return response.data;
-};*/
 export const getCurrentUser = async () => {
   try {
     const response = await api.get('/users/me');
