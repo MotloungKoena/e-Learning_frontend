@@ -11,6 +11,7 @@ import {
 } from '../../services/courses';
 import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft, CheckCircle } from 'lucide-react';
 
+//courseDetails
 const CourseDetails = () => {
 
   const { id } = useParams();
