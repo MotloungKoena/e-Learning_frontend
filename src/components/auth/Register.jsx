@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, UserCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+//register
 const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
