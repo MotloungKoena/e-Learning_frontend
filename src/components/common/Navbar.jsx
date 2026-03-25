@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, User, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+//navbar
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();  
   const navigate = useNavigate();
