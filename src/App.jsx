@@ -5,8 +5,10 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CourseList from './components/student/CourseList';
 import CourseDetails from './components/student/CourseDetails';
-import ProtectedRoute from './components/common/ProtectedRoute';  
-import MyLearning from './components/student/MyLearning';  
+import ProtectedRoute from './components/common/ProtectedRoute';
+import MyLearning from './components/student/MyLearning';
+import InstructorDashboard from './components/instructor/InstructorDashboard';
+import CreateCourse from './components/instructor/CreateCourse';
 
 const Home = () => (
   <div className="text-center py-12">
@@ -31,6 +33,16 @@ function App() {
               <Route path="/my-learning" element={
                 <ProtectedRoute allowedRoles={['STUDENT']}>
                   <MyLearning />
+                </ProtectedRoute>
+              } />
+              <Route path="/instructor/dashboard" element={
+                <ProtectedRoute allowedRoles={['INSTRUCTOR']}>
+                  <InstructorDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/create" element={
+                <ProtectedRoute allowedRoles={['INSTRUCTOR']}>
+                  <CreateCourse />
                 </ProtectedRoute>
               } />
             </Routes>
