@@ -41,6 +41,16 @@ const Navbar = () => {
                     My Learning
                   </Link>
                 )}
+                {user?.role === 'INSTRUCTOR' && (
+                  <>
+                    <Link to="/instructor/dashboard" className="text-gray-600 hover:text-blue-600">
+                      Dashboard
+                    </Link>
+                    <Link to="/instructor/courses/create" className="text-gray-600 hover:text-blue-600">
+                      Create Course
+                    </Link>
+                  </>
+                )}
                 <div className="flex items-center space-x-3">
                   <span className="text-gray-700">
                     Hi, {user?.firstName || 'User'}
