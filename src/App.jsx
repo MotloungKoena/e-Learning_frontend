@@ -5,6 +5,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CourseList from './components/student/CourseList';
 import CourseDetails from './components/student/CourseDetails';
+import ProtectedRoute from './components/common/ProtectedRoute';  
 
 const Home = () => (
   <div className="text-center py-12">
