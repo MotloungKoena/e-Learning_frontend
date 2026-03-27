@@ -26,6 +26,11 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/courses" element={<CourseList />} />
               <Route path="/courses/:id" element={<CourseDetails />} />
+              <Route path="/my-learning" element={
+                <ProtectedRoute allowedRoles={['STUDENT']}>
+                  <MyLearning />
+                </ProtectedRoute>
+              } />
             </Routes>
           </div>
         </div>
