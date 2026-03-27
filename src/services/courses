@@ -86,3 +86,49 @@ export const getCourseMaterialsWithProgress = async (courseId) => {
   const response = await api.get(`/courses/${courseId}/materials`);
   return response.data;
 };
+
+// ============ INSTRUCTOR METHODS ============
+
+// Get instructor's courses
+export const getInstructorCourses = async () => {
+  const response = await api.get('/courses/my-courses');
+  return response.data;
+};
+
+// Create a new course
+export const createCourse = async (courseData) => {
+  const response = await api.post('/courses', courseData);
+  return response.data;
+};
+
+// Update course
+export const updateCourse = async (courseId, courseData) => {
+  const response = await api.put(`/courses/${courseId}`, courseData);
+  return response.data;
+};
+
+// Publish a course
+export const publishCourse = async (courseId) => {
+  const response = await api.put(`/courses/${courseId}/publish`);
+  return response.data;
+};
+
+// Delete a course
+export const deleteCourse = async (courseId) => {
+  const response = await api.delete(`/courses/${courseId}`);
+  return response.data;
+};
+
+// Get students enrolled in a course
+export const getCourseStudents = async (courseId) => {
+  const response = await api.get(`/enrollments/course/${courseId}/students`);
+  return response.data;
+};
+
+// Upload material to course
+export const uploadMaterial = async (courseId, formData) => {
+  const response = await api.post(`/courses/${courseId}/materials`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return response.data;
+};
