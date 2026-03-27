@@ -67,3 +67,22 @@ export const getCourseRatingSummary = async (courseId) => {
   const response = await api.get(`/courses/${courseId}/ratings/summary`);
   return response.data;
 };
+
+
+// Get student's enrolled courses with progress
+export const getMyEnrolledCourses = async () => {
+  const response = await api.get('/enrollments/my-courses');
+  return response.data;
+};
+
+// Update progress for a specific enrollment
+export const updateEnrollmentProgress = async (enrollmentId, progress) => {
+  const response = await api.put(`/enrollments/${enrollmentId}/progress?progress=${progress}`);
+  return response.data;
+};
+
+// Get course materials with progress tracking
+export const getCourseMaterialsWithProgress = async (courseId) => {
+  const response = await api.get(`/courses/${courseId}/materials`);
+  return response.data;
+};
