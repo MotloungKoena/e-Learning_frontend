@@ -132,3 +132,15 @@ export const uploadMaterial = async (courseId, formData) => {
   });
   return response.data;
 };
+
+// Mark a material as watched
+export const markMaterialWatched = async (materialId) => {
+  const response = await api.put(`/materials/${materialId}/watch`);
+  return response.data;
+};
+
+// Get material by ID
+export const getMaterialById = async (materialId) => {
+  const response = await api.get(`/materials/${materialId}`);
+  return response.data;
+};

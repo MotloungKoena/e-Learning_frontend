@@ -9,6 +9,10 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import MyLearning from './components/student/MyLearning';
 import InstructorDashboard from './components/instructor/InstructorDashboard';
 import CreateCourse from './components/instructor/CreateCourse';
+import AdminDashboard from './components/admin/AdminDashboard';
+import UserManagement from './components/admin/UserManagement';
+import CourseApproval from './components/admin/CourseApproval';
+import MaterialPlayer from './components/student/MaterialPlayer';
 
 const Home = () => (
   <div className="text-center py-12">
@@ -43,6 +47,26 @@ function App() {
               <Route path="/instructor/courses/create" element={
                 <ProtectedRoute allowedRoles={['INSTRUCTOR']}>
                   <CreateCourse />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/dashboard" element={
+                <ProtectedRoute allowedRoles={['ADMIN']}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/users" element={
+                <ProtectedRoute allowedRoles={['ADMIN']}>
+                  <UserManagement />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/courses" element={
+                <ProtectedRoute allowedRoles={['ADMIN']}>
+                  <CourseApproval />
+                </ProtectedRoute>
+              } />
+              <Route path="/courses/:courseId/materials/:materialId" element={
+                <ProtectedRoute allowedRoles={['STUDENT']}>
+                  <MaterialPlayer />
                 </ProtectedRoute>
               } />
             </Routes>

@@ -10,6 +10,7 @@ import {
   getMyCourses
 } from '../../services/courses';
 import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 //courseDetails
 const CourseDetails = () => {
@@ -106,8 +107,8 @@ const CourseDetails = () => {
       setIsEnrolled(true);
       //Refresh course data to get updated enrollment count
       const updatedCourse = await getCourseById(id);
-      console.log('Updated course after enrollment:', updatedCourse); 
-      console.log('Enrollments count:', updatedCourse.enrollments?.length);  
+      console.log('Updated course after enrollment:', updatedCourse);
+      console.log('Enrollments count:', updatedCourse.enrollments?.length);
       setCourse(updatedCourse);
 
       setSuccess('Successfully enrolled! You can now access course materials.');
@@ -249,7 +250,11 @@ const CourseDetails = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Course Materials</h2>
           <div className="space-y-4">
             {materials.map(material => (
-              <div key={material.id} className="flex items-center p-4 border rounded-lg hover:bg-gray-50">
+              <Link
+                key={material.id}
+                to={`/courses/${course.id}/materials/${material.id}`}
+                className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition cursor-pointer"
+              >
                 {material.fileType === 'VIDEO' ? (
                   <PlayCircle className="h-6 w-6 text-blue-600 mr-3" />
                 ) : (
@@ -264,12 +269,14 @@ const CourseDetails = () => {
                 {material.duration && (
                   <span className="text-sm text-gray-500">{material.duration} min</span>
                 )}
-              </div>
+                {material.watched && (
+                  <CheckCircle className="h-5 w-5 text-green-500 ml-2" />
+                )}
+              </Link>
             ))}
           </div>
         </div>
       )}
-
       {/* Rating Section */}
       {isAuthenticated && isStudent && isEnrolled && (
         <div className="bg-white rounded-lg shadow-md p-8">
