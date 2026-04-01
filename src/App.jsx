@@ -16,6 +16,7 @@ import MaterialPlayer from './components/student/MaterialPlayer';
 //import AdminDashboard from './components/admin/AdminDashboard';
 //import UserManagement from './components/admin/UserManagement';
 import CourseManagement from './components/admin/CourseManagement';
+import UploadMaterials from './components/instructor/UploadMaterials';
 
 
 const Home = () => (
@@ -71,6 +72,11 @@ function App() {
               <Route path="/courses/:courseId/materials/:materialId" element={
                 <ProtectedRoute allowedRoles={['STUDENT']}>
                   <MaterialPlayer />
+                </ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/:courseId/materials" element={
+                <ProtectedRoute allowedRoles={['INSTRUCTOR']}>
+                  <UploadMaterials />
                 </ProtectedRoute>
               } />
             </Routes>
