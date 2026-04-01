@@ -13,6 +13,10 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import UserManagement from './components/admin/UserManagement';
 import CourseApproval from './components/admin/CourseApproval';
 import MaterialPlayer from './components/student/MaterialPlayer';
+//import AdminDashboard from './components/admin/AdminDashboard';
+//import UserManagement from './components/admin/UserManagement';
+import CourseManagement from './components/admin/CourseManagement';
+
 
 const Home = () => (
   <div className="text-center py-12">
@@ -61,7 +65,7 @@ function App() {
               } />
               <Route path="/admin/courses" element={
                 <ProtectedRoute allowedRoles={['ADMIN']}>
-                  <CourseApproval />
+                  <CourseManagement />
                 </ProtectedRoute>
               } />
               <Route path="/courses/:courseId/materials/:materialId" element={
