@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   getCourseById,
@@ -9,12 +9,14 @@ import {
   rateCourse,
   getMyCourses
 } from '../../services/courses';
-import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BookOpen, Star, Clock, Users, PlayCircle, FileText, ChevronLeft, CheckCircle, CreditCard } from 'lucide-react';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from '../payments/CheckoutForm';
 
-//courseDetails
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+
 const CourseDetails = () => {
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated, isStudent } = useAuth();
@@ -30,7 +32,9 @@ const CourseDetails = () => {
   const [userRating, setUserRating] = useState(0);
   const [userReview, setUserReview] = useState('');
   const [showRatingForm, setShowRatingForm] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
+  // Debugging logs
   console.log('Auth state:', {
     isAuthenticated,
     isStudent,
@@ -38,7 +42,6 @@ const CourseDetails = () => {
     hasUser: !!user
   });
 
-  //debugging
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log('Manual token check:', token);
@@ -47,7 +50,7 @@ const CourseDetails = () => {
   }, [isAuthenticated, user]);
 
   useEffect(() => {
-    console.log('Course ID from URL:', id); // Debugging log
+    console.log('Course ID from URL:', id);
     fetchCourseDetails();
     checkEnrollment();
   }, [id]);
@@ -64,7 +67,6 @@ const CourseDetails = () => {
       setCourse(courseData);
       setRatingSummary(ratingData);
 
-      // Try to fetch materials if enrolled
       if (isEnrolled) {
         const materialsData = await getCourseMaterials(id).catch(() => []);
         setMaterials(materialsData);
@@ -72,7 +74,6 @@ const CourseDetails = () => {
     } catch (err) {
       console.error('Failed to load course details:', err);
       setError('Failed to load course details');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -105,15 +106,9 @@ const CourseDetails = () => {
     try {
       await enrollInCourse(id);
       setIsEnrolled(true);
-      //Refresh course data to get updated enrollment count
       const updatedCourse = await getCourseById(id);
-      console.log('Updated course after enrollment:', updatedCourse);
-      console.log('Enrollments count:', updatedCourse.enrollments?.length);
       setCourse(updatedCourse);
-
       setSuccess('Successfully enrolled! You can now access course materials.');
-
-      // Fetch materials after enrollment
       const materialsData = await getCourseMaterials(id);
       setMaterials(materialsData);
     } catch (err) {
@@ -224,13 +219,23 @@ const CourseDetails = () => {
             </div>
           ) : (
             isStudent ? (
-              <button
-                onClick={handleEnroll}
-                disabled={enrolling}
-                className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              >
-                {enrolling ? 'Enrolling...' : 'Enroll Now'}
-              </button>
+              course.price > 0 ? (
+                <button
+                  onClick={() => setShowPayment(true)}
+                  className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                >
+                  <CreditCard className="h-5 w-5" />
+                  Buy Now - ${course.price}
+                </button>
+              ) : (
+                <button
+                  onClick={handleEnroll}
+                  disabled={enrolling}
+                  className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {enrolling ? 'Enrolling...' : 'Enroll Now (Free)'}
+                </button>
+              )
             ) : (
               <button
                 onClick={() => navigate('/login')}
@@ -240,7 +245,6 @@ const CourseDetails = () => {
               </button>
             )
           )}
-
         </div>
       </div>
 
@@ -277,6 +281,7 @@ const CourseDetails = () => {
           </div>
         </div>
       )}
+
       {/* Rating Section */}
       {isAuthenticated && isStudent && isEnrolled && (
         <div className="bg-white rounded-lg shadow-md p-8">
@@ -336,6 +341,54 @@ const CourseDetails = () => {
               </div>
             </form>
           )}
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPayment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-800">Complete Your Purchase</h2>
+              <button
+                onClick={() => setShowPayment(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p className="text-gray-600 mb-2">
+              <strong>{course.title}</strong>
+            </p>
+            <p className="text-gray-600 mb-4">
+              Course by {course.instructor?.firstName} {course.instructor?.lastName}
+            </p>
+            
+            <div className="border-t border-b py-3 mb-4">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Price:</span>
+                <span className="text-2xl font-bold text-blue-600">${course.price}</span>
+              </div>
+            </div>
+            
+            <Elements stripe={stripePromise}>
+              <CheckoutForm
+                courseId={course.id}
+                amount={course.price}
+                onSuccess={(paymentIntent) => {
+                  console.log('Payment successful:', paymentIntent);
+                  setShowPayment(false);
+                  handleEnroll();
+                }}
+                onCancel={() => setShowPayment(false)}
+              />
+            </Elements>
+            
+            <p className="text-xs text-gray-400 text-center mt-4">
+              Your payment is secure. We use Stripe for payment processing.
+            </p>
+          </div>
         </div>
       )}
     </div>
