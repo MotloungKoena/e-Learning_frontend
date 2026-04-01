@@ -6,7 +6,7 @@ import {
   publishCourse, 
   deleteCourse 
 } from '../../services/courses';
-import { BookOpen, Users, Eye, Edit, Trash2, PlusCircle, CheckCircle, XCircle } from 'lucide-react';
+import { BookOpen, Users, Eye, Edit, Trash2, PlusCircle, CheckCircle, XCircle, Upload } from 'lucide-react';
 
 const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -35,7 +35,7 @@ const InstructorDashboard = () => {
     try {
       await publishCourse(courseId);
       setSuccess('Course published successfully!');
-      fetchCourses(); // Refresh the list
+      fetchCourses();
     } catch (err) {
       setError('Failed to publish course');
     }
@@ -49,7 +49,7 @@ const InstructorDashboard = () => {
     try {
       await deleteCourse(courseId);
       setSuccess('Course deleted successfully!');
-      fetchCourses(); // Refresh the list
+      fetchCourses();
     } catch (err) {
       setError('Failed to delete course');
     }
@@ -174,6 +174,15 @@ const InstructorDashboard = () => {
                     </div>
                     
                     <div className="flex gap-2">
+                      {/* Add Materials Button */}
+                      <Link
+                        to={`/instructor/courses/${course.id}/materials`}
+                        className="p-2 text-gray-600 hover:text-green-600 transition"
+                        title="Add Materials"
+                      >
+                        <Upload className="h-5 w-5" />
+                      </Link>
+                      
                       <Link
                         to={`/instructor/courses/${course.id}/students`}
                         className="p-2 text-gray-600 hover:text-blue-600 transition"
@@ -181,6 +190,7 @@ const InstructorDashboard = () => {
                       >
                         <Users className="h-5 w-5" />
                       </Link>
+                      
                       <Link
                         to={`/instructor/courses/${course.id}/edit`}
                         className="p-2 text-gray-600 hover:text-yellow-600 transition"
@@ -188,6 +198,7 @@ const InstructorDashboard = () => {
                       >
                         <Edit className="h-5 w-5" />
                       </Link>
+                      
                       {course.status === 'DRAFT' && (
                         <button
                           onClick={() => handlePublish(course.id)}
@@ -197,6 +208,7 @@ const InstructorDashboard = () => {
                           <CheckCircle className="h-5 w-5" />
                         </button>
                       )}
+                      
                       <button
                         onClick={() => handleDelete(course.id)}
                         className="p-2 text-gray-600 hover:text-red-600 transition"
