@@ -16,9 +16,9 @@ import MaterialPlayer from './components/student/MaterialPlayer';
 import UploadMaterials from './components/instructor/UploadMaterials';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import Navbar from './components/common/NavBar';
+//import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import { AuthProvider } from './context/AuthContext';
+//import Navbar from './components/common/NavBar';
 import ToastProvider from './components/common/ToastProvider';
 
 

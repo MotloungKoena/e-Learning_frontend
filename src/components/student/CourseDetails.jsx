@@ -14,6 +14,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../payments/CheckoutForm';
 import toast from 'react-hot-toast';
+import { CourseDetailsSkeleton } from '../common/Skeleton';
 
 //const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -143,12 +144,9 @@ const CourseDetails = () => {
     }
   };
 
+  // Loading skeleton
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <CourseDetailsSkeleton />;
   }
 
   if (!course) {

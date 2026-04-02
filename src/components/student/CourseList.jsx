@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getPublishedCourses, getMyCourses } from '../../services/courses';
 import { BookOpen, Star, Clock, Users, CheckCircle } from 'lucide-react';
+import { CourseCardSkeleton } from '../common/Skeleton';
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -45,10 +46,30 @@ const CourseList = () => {
     return matchesSearch && matchesCategory;
   });
 
+  // Loading skeleton
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="max-w-7xl mx-auto">
+        {/* Welcome Header Skeleton */}
+        <div className="mb-8">
+          <div className="animate-pulse bg-gray-200 h-8 w-64 rounded mb-2"></div>
+          <div className="animate-pulse bg-gray-200 h-4 w-96 rounded"></div>
+        </div>
+        
+        {/* Search Bar Skeleton */}
+        <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="animate-pulse bg-gray-200 h-10 flex-1 rounded-lg"></div>
+            <div className="animate-pulse bg-gray-200 h-10 w-40 rounded-lg"></div>
+          </div>
+        </div>
+        
+        {/* Course Grid Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <CourseCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }

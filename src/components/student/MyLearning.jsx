@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getMyEnrolledCourses, updateEnrollmentProgress } from '../../services/courses';
 import { BookOpen, PlayCircle, CheckCircle, Clock, Award } from 'lucide-react';
+import { MyLearningCardSkeleton, StatsCardSkeleton } from '../common/Skeleton';
+import toast from 'react-hot-toast';
 
 const MyLearning = () => {
   const [enrollments, setEnrollments] = useState([]);
@@ -21,6 +23,7 @@ const MyLearning = () => {
       setEnrollments(data);
     } catch (err) {
       setError('Failed to load your enrolled courses');
+      toast.error('Failed to load your enrolled courses');
       console.error(err);
     } finally {
       setLoading(false);
@@ -31,12 +34,13 @@ const MyLearning = () => {
     setUpdating(enrollmentId);
     try {
       const updated = await updateEnrollmentProgress(enrollmentId, newProgress);
-      // Update the enrollment in the list
       setEnrollments(prev => prev.map(e => 
         e.id === enrollmentId ? { ...e, progress: updated.progress, completed: updated.completed } : e
       ));
+      toast.success(`Progress updated to ${newProgress}%!`);
     } catch (err) {
       console.error('Failed to update progress:', err);
+      toast.error('Failed to update progress');
     } finally {
       setUpdating(null);
     }
@@ -51,10 +55,29 @@ const MyLearning = () => {
     return 'bg-green-600';
   };
 
+  // Loading skeleton
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="max-w-7xl mx-auto">
+        {/* Header Skeleton */}
+        <div className="mb-8">
+          <div className="animate-pulse bg-gray-200 h-8 w-48 rounded mb-2"></div>
+          <div className="animate-pulse bg-gray-200 h-4 w-96 rounded"></div>
+        </div>
+        
+        {/* Stats Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {[1, 2, 3].map((i) => (
+            <StatsCardSkeleton key={i} />
+          ))}
+        </div>
+        
+        {/* Course List Skeleton */}
+        <div className="space-y-6">
+          {[1, 2].map((i) => (
+            <MyLearningCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }

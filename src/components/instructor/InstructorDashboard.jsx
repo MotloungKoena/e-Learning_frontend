@@ -8,6 +8,7 @@ import {
 } from '../../services/courses';
 import { BookOpen, Users, Eye, Edit, Trash2, PlusCircle, CheckCircle, XCircle, Upload } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { StatsCardSkeleton } from '../common/Skeleton';
 
 const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -61,10 +62,44 @@ const InstructorDashboard = () => {
     }
   };
 
+  // Loading skeleton
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="max-w-7xl mx-auto">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <div className="animate-pulse bg-gray-200 h-8 w-64 rounded mb-2"></div>
+            <div className="animate-pulse bg-gray-200 h-4 w-96 rounded"></div>
+          </div>
+          <div className="animate-pulse bg-gray-200 h-10 w-36 rounded-lg"></div>
+        </div>
+        
+        {/* Stats Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {[1, 2, 3].map((i) => (
+            <StatsCardSkeleton key={i} />
+          ))}
+        </div>
+        
+        {/* Courses List Skeleton */}
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="flex flex-col md:flex-row">
+                <div className="animate-pulse bg-gradient-to-r from-blue-500 to-purple-600 md:w-48 h-32"></div>
+                <div className="flex-1 p-4">
+                  <div className="animate-pulse bg-gray-200 h-6 w-3/4 rounded mb-2"></div>
+                  <div className="animate-pulse bg-gray-200 h-4 w-full rounded mb-2"></div>
+                  <div className="flex gap-3">
+                    <div className="animate-pulse bg-gray-200 h-4 w-24 rounded"></div>
+                    <div className="animate-pulse bg-gray-200 h-4 w-16 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
