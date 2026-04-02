@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getMaterialById, markMaterialWatched, getCourseMaterials } from '../../services/courses';
 import { ChevronLeft, Play, FileText, CheckCircle, Download } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const MaterialPlayer = () => {
   const { courseId, materialId } = useParams();
@@ -29,6 +30,7 @@ const MaterialPlayer = () => {
       setMaterials(allMaterials);
     } catch (err) {
       setError('Failed to load material');
+      toast.error('Failed to load material');
     } finally {
       setLoading(false);
     }
@@ -39,8 +41,10 @@ const MaterialPlayer = () => {
     try {
       await markMaterialWatched(materialId);
       setMaterial({ ...material, watched: true });
+      toast.success('Material marked as completed!');
     } catch (err) {
       console.error('Failed to mark as watched:', err);
+      toast.error('Failed to mark as completed');
     } finally {
       setMarking(false);
     }
@@ -50,6 +54,7 @@ const MaterialPlayer = () => {
     const currentIndex = materials.findIndex(m => m.id === parseInt(materialId));
     if (currentIndex < materials.length - 1) {
       const nextMaterial = materials[currentIndex + 1];
+      toast.success(`Next: ${nextMaterial.title}`);
       navigate(`/courses/${courseId}/materials/${nextMaterial.id}`);
     }
   };
@@ -58,6 +63,7 @@ const MaterialPlayer = () => {
     const currentIndex = materials.findIndex(m => m.id === parseInt(materialId));
     if (currentIndex > 0) {
       const prevMaterial = materials[currentIndex - 1];
+      toast.success(`Previous: ${prevMaterial.title}`);
       navigate(`/courses/${courseId}/materials/${prevMaterial.id}`);
     }
   };

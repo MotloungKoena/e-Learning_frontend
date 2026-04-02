@@ -7,6 +7,7 @@ import {
   deleteCourse 
 } from '../../services/courses';
 import { BookOpen, Users, Eye, Edit, Trash2, PlusCircle, CheckCircle, XCircle, Upload } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -25,6 +26,7 @@ const InstructorDashboard = () => {
       setCourses(data);
     } catch (err) {
       setError('Failed to load your courses');
+      toast.error('Failed to load your courses');
       console.error(err);
     } finally {
       setLoading(false);
@@ -35,9 +37,11 @@ const InstructorDashboard = () => {
     try {
       await publishCourse(courseId);
       setSuccess('Course published successfully!');
+      toast.success('Course published successfully!');
       fetchCourses();
     } catch (err) {
       setError('Failed to publish course');
+      toast.error('Failed to publish course');
     }
   };
 
@@ -49,9 +53,11 @@ const InstructorDashboard = () => {
     try {
       await deleteCourse(courseId);
       setSuccess('Course deleted successfully!');
+      toast.success('Course deleted successfully!');
       fetchCourses();
     } catch (err) {
       setError('Failed to delete course');
+      toast.error('Failed to delete course');
     }
   };
 

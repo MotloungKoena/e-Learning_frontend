@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getCourseById, uploadMaterial, getCourseMaterials } from '../../services/courses';
 import { ChevronLeft, Upload, FileText, Video, X, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const UploadMaterials = () => {
   const { courseId } = useParams();
@@ -39,6 +40,7 @@ const UploadMaterials = () => {
       setMaterials(materialsData);
     } catch (err) {
       setError('Failed to load course data');
+      toast.error('Failed to load course data');
     } finally {
       setLoading(false);
     }
@@ -56,6 +58,7 @@ const UploadMaterials = () => {
       } else {
         setFileType('DOCUMENT');
       }
+      toast.success(`File selected: ${file.name}`);
     }
   };
 
@@ -63,6 +66,7 @@ const UploadMaterials = () => {
     e.preventDefault();
     if (!selectedFile) {
       setError('Please select a file');
+      toast.error('Please select a file');
       return;
     }
 
@@ -80,11 +84,14 @@ const UploadMaterials = () => {
     try {
       await uploadMaterial(courseId, uploadFormData);
       setSuccess('Material uploaded successfully!');
+      toast.success('Material uploaded successfully!');
       setFormData({ title: '', description: '', duration: '', orderIndex: 0 });
       setSelectedFile(null);
       fetchData(); // Refresh materials list
     } catch (err) {
-      setError(err.response?.data || 'Failed to upload material');
+      const errorMsg = err.response?.data || 'Failed to upload material';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setUploading(false);
     }
