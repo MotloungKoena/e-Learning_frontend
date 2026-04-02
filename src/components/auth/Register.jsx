@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, UserCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 //register
 const Register = () => {
@@ -32,6 +33,7 @@ const Register = () => {
       console.log('Registration response:', response);
       
       setSuccess('Registration successful! Please check your email to verify your account.');
+      toast.success('Registration successful! Check your email for verification.');
       
       //Clear form
       setFormData({
@@ -48,7 +50,9 @@ const Register = () => {
       
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.response?.data || 'Registration failed. Please try again.');
+      const errorMessage = err.response?.data || 'Registration failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

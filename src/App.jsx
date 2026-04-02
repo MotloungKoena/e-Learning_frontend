@@ -16,8 +16,12 @@ import MaterialPlayer from './components/student/MaterialPlayer';
 import UploadMaterials from './components/instructor/UploadMaterials';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/common/NavBar';
+import ToastProvider from './components/common/ToastProvider';
 
-// Initialize Stripe with your publishable key from environment variables
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const Home = () => (
@@ -31,6 +35,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+         <ToastProvider />
         <Elements stripe={stripePromise}>
           <div className="min-h-screen bg-gray-50">
             <Navbar />

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 //Login
 const Login = () => {
@@ -16,21 +17,23 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
-  setLoading(true);
-  
-  try {
-    await login(formData.email, formData.password);
-    navigate('/courses');
-  } catch (err) {
-    console.error('Login error in component:', err);
-    const errorMessage = err.response?.data || 'Login failed. Please try again.';
-    setError(errorMessage);
-  } finally {
-    setLoading(false);
-  }
-};
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    
+    try {
+      await login(formData.email, formData.password);
+      toast.success('Login successful! Redirecting...');
+      navigate('/courses');
+    } catch (err) {
+      console.error('Login error in component:', err);
+      const errorMessage = err.response?.data || 'Login failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
