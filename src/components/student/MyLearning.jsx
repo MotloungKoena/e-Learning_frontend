@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getMyEnrolledCourses, updateEnrollmentProgress } from '../../services/courses';
-import { BookOpen, PlayCircle, CheckCircle, Clock, Award } from 'lucide-react';
+import { BookOpen, PlayCircle, CheckCircle, Clock, Award, FileText } from 'lucide-react';
 import { MyLearningCardSkeleton, StatsCardSkeleton } from '../common/Skeleton';
 import toast from 'react-hot-toast';
+import api from '../../services/api';
 
 const MyLearning = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updating, setUpdating] = useState(null);
+  const [downloading, setDownloading] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -43,6 +45,33 @@ const MyLearning = () => {
       toast.error('Failed to update progress');
     } finally {
       setUpdating(null);
+    }
+  };
+
+  const handleDownloadCertificate = async (enrollmentId) => {
+    setDownloading(enrollmentId);
+    try {
+      const response = await api.get(`/certificates/download/${enrollmentId}`, {
+        responseType: 'blob'
+      });
+      
+      // Create a blob URL and trigger download
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `certificate.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Certificate downloaded successfully!');
+    } catch (err) {
+      console.error('Failed to download certificate:', err);
+      toast.error(err.response?.data || 'Failed to download certificate');
+    } finally {
+      setDownloading(null);
     }
   };
 
@@ -228,6 +257,18 @@ const MyLearning = () => {
                           Mark Complete
                         </button>
                       </div>
+                    )}
+                    
+                    {/* Certificate Download Button - Only show for completed courses */}
+                    {enrollment.completed && (
+                      <button
+                        onClick={() => handleDownloadCertificate(enrollment.id)}
+                        disabled={downloading === enrollment.id}
+                        className="px-4 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition disabled:opacity-50 flex items-center gap-2"
+                      >
+                        <FileText className="h-4 w-4" />
+                        {downloading === enrollment.id ? 'Generating...' : 'Download Certificate'}
+                      </button>
                     )}
                   </div>
                 </div>
