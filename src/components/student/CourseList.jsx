@@ -35,7 +35,7 @@ const CourseList = () => {
     }
   };
 
-  // Get unique categories
+
   const categories = ['All', ...new Set(courses.map(c => c.category).filter(Boolean))];
 
   // Filter courses

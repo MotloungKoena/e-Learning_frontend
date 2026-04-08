@@ -87,7 +87,8 @@ export const getCourseMaterialsWithProgress = async (courseId) => {
   return response.data;
 };
 
-// ============ INSTRUCTOR METHODS ============
+
+// ============ INSTRUCTOR METHODS here ============
 
 // Get instructor's courses
 export const getInstructorCourses = async () => {
