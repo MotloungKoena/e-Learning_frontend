@@ -4,7 +4,6 @@ import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
-//Login
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',

@@ -4,7 +4,7 @@ const Skeleton = ({ className = '' }) => {
   );
 };
 
-// Course Card Skeleton
+
 export const CourseCardSkeleton = () => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -22,7 +22,7 @@ export const CourseCardSkeleton = () => {
   );
 };
 
-// Course Details Skeleton
+
 export const CourseDetailsSkeleton = () => {
   return (
     <div className="max-w-7xl mx-auto">
@@ -50,7 +50,7 @@ export const CourseDetailsSkeleton = () => {
   );
 };
 
-// My Learning Card Skeleton
+
 export const MyLearningCardSkeleton = () => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -71,7 +71,7 @@ export const MyLearningCardSkeleton = () => {
   );
 };
 
-// Dashboard Stats Skeleton
+
 export const StatsCardSkeleton = () => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">

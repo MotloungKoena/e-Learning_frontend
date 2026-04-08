@@ -4,7 +4,6 @@ import { Mail, Lock, User, UserCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
-//register
 const Register = () => {
   const [formData, setFormData] = useState({
     email: '',

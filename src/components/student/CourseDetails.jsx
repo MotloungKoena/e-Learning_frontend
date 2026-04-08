@@ -16,10 +16,7 @@ import CheckoutForm from '../payments/CheckoutForm';
 import toast from 'react-hot-toast';
 import { CourseDetailsSkeleton } from '../common/Skeleton';
 
-//const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-console.log('Stripe Publishable Key:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-console.log('Stripe Key from env:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -39,27 +36,28 @@ const CourseDetails = () => {
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
 
-  // Debugging logs
-  console.log('Auth state:', {
-    isAuthenticated,
-    isStudent,
-    user: user?.email,
-    hasUser: !!user
-  });
+  // Debug logs
+  console.log('====== COURSE DETAILS PAGE LOADED ======');
+  console.log('Course ID from URL:', id);
+  console.log('isAuthenticated:', isAuthenticated);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    console.log('Manual token check:', token);
-    console.log('Context isAuthenticated:', isAuthenticated);
-    console.log('Context user:', user);
-  }, [isAuthenticated, user]);
+  // Fetch materials function
+  const fetchMaterials = async () => {
+    if (!isEnrolled) {
+      console.log('Not enrolled, skipping materials fetch');
+      return;
+    }
+    try {
+      console.log('Fetching materials for course:', id);
+      const materialsData = await getCourseMaterials(id);
+      console.log('Materials fetched:', materialsData);
+      setMaterials(materialsData);
+    } catch (err) {
+      console.error('Failed to fetch materials:', err);
+    }
+  };
 
-  useEffect(() => {
-    console.log('Course ID from URL:', id);
-    fetchCourseDetails();
-    checkEnrollment();
-  }, [id]);
-
+  // Fetch course details
   const fetchCourseDetails = async () => {
     try {
       console.log('Fetching course with ID:', id);
@@ -68,14 +66,8 @@ const CourseDetails = () => {
         getCourseRatingSummary(id).catch(() => null)
       ]);
       console.log('Course data received:', courseData);
-
       setCourse(courseData);
       setRatingSummary(ratingData);
-
-      if (isEnrolled) {
-        const materialsData = await getCourseMaterials(id).catch(() => []);
-        setMaterials(materialsData);
-      }
     } catch (err) {
       console.error('Failed to load course details:', err);
       setError('Failed to load course details');
@@ -85,20 +77,21 @@ const CourseDetails = () => {
     }
   };
 
+  // Check enrollment
   const checkEnrollment = async () => {
     if (!isAuthenticated) return;
-
     try {
       const myCourses = await getMyCourses();
       console.log('My enrolled courses:', myCourses);
       const enrolled = myCourses.some(e => e.course?.id === parseInt(id));
       setIsEnrolled(enrolled);
-      console.log('Is enrolled:', enrolled);
+      console.log('Is enrolled in this course:', enrolled);
     } catch (err) {
       console.error('Failed to check enrollment:', err);
     }
   };
 
+  // Handle enrollment
   const handleEnroll = async () => {
     if (!isAuthenticated) {
       toast.error('Please login to enroll');
@@ -128,6 +121,7 @@ const CourseDetails = () => {
     }
   };
 
+  // Handle rating submit
   const handleRatingSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -143,6 +137,25 @@ const CourseDetails = () => {
       toast.error(errorMsg);
     }
   };
+
+  // Effects
+  useEffect(() => {
+    fetchCourseDetails();
+    checkEnrollment();
+  }, [id]);
+
+  // Fetch materials when enrollment status changes
+  useEffect(() => {
+    if (isEnrolled) {
+      fetchMaterials();
+    }
+  }, [isEnrolled, id]);
+
+  // Debug: log when materials change
+  useEffect(() => {
+    console.log('Materials state updated:', materials);
+    console.log('Materials length:', materials.length);
+  }, [materials]);
 
   // Loading skeleton
   if (loading) {

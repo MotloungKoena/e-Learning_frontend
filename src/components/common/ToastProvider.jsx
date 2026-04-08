@@ -9,7 +9,7 @@ const ToastProvider = () => {
       containerClassName=""
       containerStyle={{}}
       toastOptions={{
-        // Default options for all toasts
+
         duration: 4000,
         style: {
           background: '#363636',
